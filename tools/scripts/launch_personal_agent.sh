@@ -19,6 +19,7 @@ DAEMON_AUTH_TOKEN="${DAEMON_AUTH_TOKEN:-}"
 DAEMON_AUTH_TOKEN_FILE="${DAEMON_AUTH_TOKEN_FILE:-}"
 DAEMON_UI_KEYCHAIN_SERVICE="${DAEMON_UI_KEYCHAIN_SERVICE:-personalagent.ui.local_dev_token.v1}"
 DAEMON_UI_KEYCHAIN_ACCOUNT="${DAEMON_UI_KEYCHAIN_ACCOUNT:-daemon_auth_token}"
+DAEMON_DEFAULT_LOCAL_TOKEN_FILE="${DAEMON_DEFAULT_LOCAL_TOKEN_FILE:-${HOME}/Library/Application Support/personal-agent/control/local-dev.control.token}"
 DAEMON_DB_PATH="${DAEMON_DB_PATH:-${HOME}/Library/Application Support/personal-agent/runtime.db}"
 DAEMON_BINARY_OVERRIDE="${DAEMON_BINARY:-}"
 DAEMON_START_MODE="${DAEMON_START_MODE:-auto}"
@@ -45,6 +46,8 @@ DAEMON_STOP_ON_EXIT_RESOLVED=0
 FORCE_STOP_DAEMON_ON_SIGNAL=0
 DAEMON_AUTH_TOKEN_RESOLVED=""
 DAEMON_AUTH_SOURCE="unset"
+declare -a DAEMON_AUTH_CANDIDATE_SOURCES=()
+declare -a DAEMON_AUTH_CANDIDATE_TOKENS=()
 
 usage() {
   cat <<'EOF'
@@ -57,7 +60,7 @@ Options:
   --daemon-binary <path>       Explicit daemon executable path.
   --daemon-listen-mode <mode>  Daemon listen mode (default: tcp).
   --daemon-address <address>   Daemon listen address (default: 127.0.0.1:7071).
-  --daemon-auth-token <token>  Daemon auth token (defaults to stored app token in Keychain; fallback daemon-test-token).
+  --daemon-auth-token <token>  Daemon auth token (defaults to stored app token in Keychain; launcher also probes the canonical local-dev token file for existing-daemon parity; fallback daemon-test-token).
   --daemon-auth-token-file <path>
                                Daemon auth token file (preferred over token literal).
   --daemon-db-path <path>      Daemon sqlite path.
@@ -128,6 +131,21 @@ read_stored_ui_token_from_keychain() {
   printf '%s\n' "${stored}"
 }
 
+read_default_local_token_file() {
+  local token_file
+  token_file="$(trim_value "${DAEMON_DEFAULT_LOCAL_TOKEN_FILE}")"
+  if [[ -z "${token_file}" ]]; then
+    return 1
+  fi
+  local stored
+  stored="$(read_token_from_file "${token_file}")" || return 1
+  stored="$(trim_value "${stored}")"
+  if [[ -z "${stored}" ]]; then
+    return 1
+  fi
+  printf '%s\n' "${stored}"
+}
+
 persist_ui_token_to_keychain() {
   local token="$1"
   if [[ -z "${token}" ]]; then
@@ -147,6 +165,52 @@ persist_ui_token_to_keychain() {
   return 0
 }
 
+set_resolved_daemon_auth_material() {
+  local source="$1"
+  local token="$2"
+  DAEMON_AUTH_TOKEN="${token}"
+  DAEMON_AUTH_TOKEN_RESOLVED="${token}"
+  DAEMON_AUTH_SOURCE="${source}"
+}
+
+register_daemon_auth_candidate() {
+  local source="$1"
+  local token
+  token="$(trim_value "${2:-}")"
+  if [[ -z "${token}" ]]; then
+    return 0
+  fi
+
+  if [[ "${#DAEMON_AUTH_CANDIDATE_TOKENS[@]}" -gt 0 ]]; then
+    local existing
+    for existing in "${DAEMON_AUTH_CANDIDATE_TOKENS[@]}"; do
+      if [[ "${existing}" == "${token}" ]]; then
+        return 0
+      fi
+    done
+  fi
+
+  DAEMON_AUTH_CANDIDATE_SOURCES+=("${source}")
+  DAEMON_AUTH_CANDIDATE_TOKENS+=("${token}")
+}
+
+collect_default_daemon_auth_candidates() {
+  DAEMON_AUTH_CANDIDATE_SOURCES=()
+  DAEMON_AUTH_CANDIDATE_TOKENS=()
+
+  local stored_token=""
+  if stored_token="$(read_stored_ui_token_from_keychain)"; then
+    register_daemon_auth_candidate "stored_ui_token_keychain" "${stored_token}"
+  fi
+
+  local default_local_token=""
+  if default_local_token="$(read_default_local_token_file)"; then
+    register_daemon_auth_candidate "default_local_token_file" "${default_local_token}"
+  fi
+
+  register_daemon_auth_candidate "default_fallback" "daemon-test-token"
+}
+
 resolve_daemon_auth_material() {
   if [[ -n "${DAEMON_AUTH_TOKEN_FILE}" ]]; then
     local file_token
@@ -155,31 +219,26 @@ resolve_daemon_auth_material() {
       echo "daemon auth token file is empty: ${DAEMON_AUTH_TOKEN_FILE}" >&2
       exit 1
     fi
-    DAEMON_AUTH_TOKEN_RESOLVED="${file_token}"
-    DAEMON_AUTH_SOURCE="token_file"
+    set_resolved_daemon_auth_material "token_file" "${file_token}"
     return 0
   fi
 
   local explicit_token
   explicit_token="$(trim_value "${DAEMON_AUTH_TOKEN}")"
   if [[ -n "${explicit_token}" ]]; then
-    DAEMON_AUTH_TOKEN="${explicit_token}"
-    DAEMON_AUTH_TOKEN_RESOLVED="${explicit_token}"
-    DAEMON_AUTH_SOURCE="token_flag"
+    set_resolved_daemon_auth_material "token_flag" "${explicit_token}"
     return 0
   fi
 
-  local stored_token=""
-  if stored_token="$(read_stored_ui_token_from_keychain)"; then
-    DAEMON_AUTH_TOKEN="${stored_token}"
-    DAEMON_AUTH_TOKEN_RESOLVED="${stored_token}"
-    DAEMON_AUTH_SOURCE="stored_ui_token_keychain"
-    return 0
+  collect_default_daemon_auth_candidates
+  if [[ "${#DAEMON_AUTH_CANDIDATE_TOKENS[@]}" -eq 0 ]]; then
+    echo "failed to resolve daemon auth token candidates" >&2
+    exit 1
   fi
 
-  DAEMON_AUTH_TOKEN="daemon-test-token"
-  DAEMON_AUTH_TOKEN_RESOLVED="${DAEMON_AUTH_TOKEN}"
-  DAEMON_AUTH_SOURCE="default_fallback"
+  set_resolved_daemon_auth_material \
+    "${DAEMON_AUTH_CANDIDATE_SOURCES[0]}" \
+    "${DAEMON_AUTH_CANDIDATE_TOKENS[0]}"
 }
 
 while [[ $# -gt 0 ]]; do
@@ -473,10 +532,15 @@ stop_launchctl_job() {
   DAEMON_LAUNCH_PLIST=""
 }
 
-daemon_http_status() {
+daemon_http_status_for_token() {
+  local token="$1"
   curl -sS -o /dev/null -w "%{http_code}" --max-time 1 \
-    -H "Authorization: Bearer ${DAEMON_AUTH_TOKEN_RESOLVED}" \
+    -H "Authorization: Bearer ${token}" \
     "http://${DAEMON_ADDRESS}/v1/capabilities/smoke" || true
+}
+
+daemon_http_status() {
+  daemon_http_status_for_token "${DAEMON_AUTH_TOKEN_RESOLVED}"
 }
 
 daemon_http_status_no_auth() {
@@ -498,8 +562,13 @@ daemon_has_existing_listener() {
 }
 
 daemon_is_reachable() {
+  daemon_is_reachable_with_token "${DAEMON_AUTH_TOKEN_RESOLVED}"
+}
+
+daemon_is_reachable_with_token() {
+  local token="$1"
   local status
-  status="$(daemon_http_status)"
+  status="$(daemon_http_status_for_token "${token}")"
   case "${status}" in
     200)
       return 0
@@ -508,6 +577,29 @@ daemon_is_reachable() {
       return 1
       ;;
   esac
+}
+
+reconcile_existing_listener_auth() {
+  if [[ "${DAEMON_AUTH_SOURCE}" == "token_file" || "${DAEMON_AUTH_SOURCE}" == "token_flag" ]]; then
+    return 1
+  fi
+
+  local index
+  for index in "${!DAEMON_AUTH_CANDIDATE_TOKENS[@]}"; do
+    local source="${DAEMON_AUTH_CANDIDATE_SOURCES[index]}"
+    local token="${DAEMON_AUTH_CANDIDATE_TOKENS[index]}"
+    if [[ "${token}" == "${DAEMON_AUTH_TOKEN_RESOLVED}" ]]; then
+      continue
+    fi
+    if daemon_is_reachable_with_token "${token}"; then
+      set_resolved_daemon_auth_material "${source}" "${token}"
+      persist_ui_token_to_keychain "${DAEMON_AUTH_TOKEN_RESOLVED}"
+      log "existing daemon authenticated via ${DAEMON_AUTH_SOURCE}; synced Keychain token for app parity"
+      return 0
+    fi
+  done
+
+  return 1
 }
 
 wait_for_daemon() {
@@ -604,75 +696,81 @@ if daemon_is_reachable; then
   log "daemon already reachable at ${DAEMON_ADDRESS}; reusing existing process (latest binary built at ${DAEMON_BINARY_RESOLVED}, auth=${DAEMON_AUTH_SOURCE})"
 else
   if daemon_has_existing_listener; then
-    echo "daemon is already listening at ${DAEMON_ADDRESS}, but auth token mismatch prevents access." >&2
-    echo "use the stored app token, pass --daemon-auth-token-file, or stop the existing daemon and relaunch." >&2
-    exit 1
-  fi
-
-  ACTIVE_DAEMON_LOG_PATH=""
-  mkdir -p "$(dirname "${DAEMON_DB_PATH}")"
-  DAEMON_LOG_PATH="${ROOT}/out/logs/launch-personal-agent-daemon.log"
-  ACTIVE_DAEMON_LOG_PATH="${DAEMON_LOG_PATH}"
-  mkdir -p "$(dirname "${DAEMON_LOG_PATH}")"
-  mkdir -p "$(dirname "${DAEMON_LAUNCHCTL_LOG_PATH}")"
-
-  log "starting daemon: ${DAEMON_BINARY_RESOLVED} (mode=${DAEMON_START_MODE_RESOLVED}, auth=${DAEMON_AUTH_SOURCE})"
-  daemon_cmd=(
-    "${DAEMON_BINARY_RESOLVED}"
-    --listen-mode "${DAEMON_LISTEN_MODE}"
-    --listen-address "${DAEMON_ADDRESS}"
-    --db "${DAEMON_DB_PATH}"
-  )
-  if [[ -n "${DAEMON_AUTH_TOKEN_FILE}" ]]; then
-    daemon_cmd+=(--auth-token-file "${DAEMON_AUTH_TOKEN_FILE}")
-  else
-    daemon_cmd+=(--auth-token "${DAEMON_AUTH_TOKEN}")
-  fi
-
-  if [[ "${DAEMON_START_MODE_RESOLVED}" == "launchctl" ]]; then
-    if start_daemon_via_launchctl "${DAEMON_LAUNCHCTL_LOG_PATH}" "${daemon_cmd[@]}"; then
-      ACTIVE_DAEMON_LOG_PATH="${DAEMON_LAUNCHCTL_LOG_PATH}"
-      log "daemon launchctl label=${DAEMON_LAUNCH_LABEL} (log=${DAEMON_LAUNCHCTL_LOG_PATH})"
+    if reconcile_existing_listener_auth; then
+      log "daemon already reachable at ${DAEMON_ADDRESS}; reusing existing process (latest binary built at ${DAEMON_BINARY_RESOLVED}, auth=${DAEMON_AUTH_SOURCE})"
     else
-      log "launchctl daemon start failed; falling back to direct spawn"
-      stop_launchctl_job
-      DAEMON_START_MODE_RESOLVED="direct"
+      echo "daemon is already listening at ${DAEMON_ADDRESS}, but auth token mismatch prevents access." >&2
+      echo "launcher tried stored local auth sources. Pass --daemon-auth-token-file, or stop the existing daemon and relaunch." >&2
+      exit 1
     fi
   fi
 
-  if [[ "${DAEMON_START_MODE_RESOLVED}" == "direct" ]]; then
+  if ! daemon_is_reachable; then
+    ACTIVE_DAEMON_LOG_PATH=""
+    mkdir -p "$(dirname "${DAEMON_DB_PATH}")"
+    DAEMON_LOG_PATH="${ROOT}/out/logs/launch-personal-agent-daemon.log"
     ACTIVE_DAEMON_LOG_PATH="${DAEMON_LOG_PATH}"
-    "${daemon_cmd[@]}" >"${DAEMON_LOG_PATH}" 2>&1 &
-    DAEMON_PID="$!"
-    DAEMON_STARTED_BY_SCRIPT=1
-    DAEMON_STARTED_BY_LAUNCHCTL=0
-    log "daemon pid=${DAEMON_PID} (log=${DAEMON_LOG_PATH})"
-  fi
+    mkdir -p "$(dirname "${DAEMON_LOG_PATH}")"
+    mkdir -p "$(dirname "${DAEMON_LAUNCHCTL_LOG_PATH}")"
 
-  if ! wait_for_daemon && [[ "${DAEMON_STARTED_BY_LAUNCHCTL}" -eq 1 ]]; then
-    log "launchctl daemon did not become reachable; falling back to direct spawn"
-    stop_launchctl_job
-    ACTIVE_DAEMON_LOG_PATH="${DAEMON_LOG_PATH}"
-    "${daemon_cmd[@]}" >"${DAEMON_LOG_PATH}" 2>&1 &
-    DAEMON_PID="$!"
-    DAEMON_STARTED_BY_SCRIPT=1
-    DAEMON_STARTED_BY_LAUNCHCTL=0
-    log "daemon pid=${DAEMON_PID} (log=${DAEMON_LOG_PATH})"
-  fi
-
-  if ! wait_for_daemon; then
-    echo "daemon failed to become reachable at ${DAEMON_ADDRESS}" >&2
-    if [[ -n "${ACTIVE_DAEMON_LOG_PATH}" && -f "${ACTIVE_DAEMON_LOG_PATH}" ]]; then
-      echo "---- daemon log tail ----" >&2
-      tail -n 80 "${ACTIVE_DAEMON_LOG_PATH}" >&2 || true
-      echo "-------------------------" >&2
+    log "starting daemon: ${DAEMON_BINARY_RESOLVED} (mode=${DAEMON_START_MODE_RESOLVED}, auth=${DAEMON_AUTH_SOURCE})"
+    daemon_cmd=(
+      "${DAEMON_BINARY_RESOLVED}"
+      --listen-mode "${DAEMON_LISTEN_MODE}"
+      --listen-address "${DAEMON_ADDRESS}"
+      --db "${DAEMON_DB_PATH}"
+    )
+    if [[ -n "${DAEMON_AUTH_TOKEN_FILE}" ]]; then
+      daemon_cmd+=(--auth-token-file "${DAEMON_AUTH_TOKEN_FILE}")
+    else
+      daemon_cmd+=(--auth-token "${DAEMON_AUTH_TOKEN}")
     fi
-    if [[ "${DAEMON_STARTED_BY_LAUNCHCTL}" -eq 1 ]]; then
+
+    if [[ "${DAEMON_START_MODE_RESOLVED}" == "launchctl" ]]; then
+      if start_daemon_via_launchctl "${DAEMON_LAUNCHCTL_LOG_PATH}" "${daemon_cmd[@]}"; then
+        ACTIVE_DAEMON_LOG_PATH="${DAEMON_LAUNCHCTL_LOG_PATH}"
+        log "daemon launchctl label=${DAEMON_LAUNCH_LABEL} (log=${DAEMON_LAUNCHCTL_LOG_PATH})"
+      else
+        log "launchctl daemon start failed; falling back to direct spawn"
+        stop_launchctl_job
+        DAEMON_START_MODE_RESOLVED="direct"
+      fi
+    fi
+
+    if [[ "${DAEMON_START_MODE_RESOLVED}" == "direct" ]]; then
+      ACTIVE_DAEMON_LOG_PATH="${DAEMON_LOG_PATH}"
+      "${daemon_cmd[@]}" >"${DAEMON_LOG_PATH}" 2>&1 &
+      DAEMON_PID="$!"
+      DAEMON_STARTED_BY_SCRIPT=1
+      DAEMON_STARTED_BY_LAUNCHCTL=0
+      log "daemon pid=${DAEMON_PID} (log=${DAEMON_LOG_PATH})"
+    fi
+
+    if ! wait_for_daemon && [[ "${DAEMON_STARTED_BY_LAUNCHCTL}" -eq 1 ]]; then
+      log "launchctl daemon did not become reachable; falling back to direct spawn"
       stop_launchctl_job
+      ACTIVE_DAEMON_LOG_PATH="${DAEMON_LOG_PATH}"
+      "${daemon_cmd[@]}" >"${DAEMON_LOG_PATH}" 2>&1 &
+      DAEMON_PID="$!"
+      DAEMON_STARTED_BY_SCRIPT=1
+      DAEMON_STARTED_BY_LAUNCHCTL=0
+      log "daemon pid=${DAEMON_PID} (log=${DAEMON_LOG_PATH})"
     fi
-    exit 1
+
+    if ! wait_for_daemon; then
+      echo "daemon failed to become reachable at ${DAEMON_ADDRESS}" >&2
+      if [[ -n "${ACTIVE_DAEMON_LOG_PATH}" && -f "${ACTIVE_DAEMON_LOG_PATH}" ]]; then
+        echo "---- daemon log tail ----" >&2
+        tail -n 80 "${ACTIVE_DAEMON_LOG_PATH}" >&2 || true
+        echo "-------------------------" >&2
+      fi
+      if [[ "${DAEMON_STARTED_BY_LAUNCHCTL}" -eq 1 ]]; then
+        stop_launchctl_job
+      fi
+      exit 1
+    fi
+    log "daemon is reachable"
   fi
-  log "daemon is reachable"
 fi
 
 if [[ "${NO_APP_LAUNCH}" == "true" ]]; then
