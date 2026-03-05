@@ -325,6 +325,14 @@ Strict layering: `types -> config -> contract -> repository -> service -> runtim
 
 ## Quickstart
 
+Launch the macOS app and local daemon together:
+
+```bash
+./tools/scripts/launch_personal_agent.sh
+```
+
+This script rebuilds the daemon, rebuilds the Debug app bundle, starts the daemon if needed, and launches `PersonalAgent.app`.
+
 Run the repository checks:
 
 ```bash
@@ -337,7 +345,7 @@ Run the full automated suite:
 tools/scripts/run_tests_all.sh
 ```
 
-Build the primary macOS app host:
+Build the primary macOS app host manually:
 
 ```bash
 cd source/apps/macos/app-host
