@@ -5,11 +5,9 @@
   <p>A macOS-first autonomous assistant that operates like a human aide: chatting, messaging, calling, emailing, managing your calendar and files, all from one daemon brain.</p>
 </div>
 
-> GitHub README adaptation of `/Users/abhishek/Documents/PA-Explainer/index.html`. The original page uses custom styling and animation; this version keeps the content and structure in a GitHub-safe format.
-
 | Lines of Code | API Endpoints | CLI Commands | Tasks Shipped | Test Cases |
 | --- | ---: | ---: | ---: | ---: |
-| 93K | 106 | 90 | 343 | 798 |
+| 151K | 109 | 129 | 543 | 1,584 |
 
 ## Status
 
@@ -319,11 +317,11 @@ Strict layering: `types -> config -> contract -> repository -> service -> runtim
 | `docs/spec` | Product, bootstrap, and data-model specs |
 | `tools/scripts` | Harness, packaging, launch, and test runner scripts |
 
-## Built in a Weekend Sprint
+## Current Delivery Snapshot
 
 | Elapsed Window | Total Commits | Commits / Hour | Test-to-Source Ratio |
 | --- | ---: | ---: | ---: |
-| ~70h | 482 | ~7/hr | 40.8% |
+| ~242h | 1,037 | ~4.3/hr | 47.3% |
 
 ## Quickstart
 
