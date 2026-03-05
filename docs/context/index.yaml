@@ -1,0 +1,73 @@
+version: 1
+updated_on: 2026-03-05
+purpose: >-
+  Public context-loading index for contributors and coding agents. Start small,
+  then load only targeted canonical docs.
+
+bootstrap:
+  - path: README.md
+    reason: Public project overview, prerequisites, and quickstart commands.
+  - path: CONTRIBUTING.md
+    reason: Public contribution workflow and expectations.
+  - path: docs/spec/bootstrap.md
+    reason: Compact project invariants and selective-read map.
+
+canonical_docs:
+  runtime_product:
+    - path: docs/spec/spec.md
+      when: Runtime behavior, orchestration, policy, delivery, and routing.
+    - path: docs/spec/data-model.md
+      when: Entity schema, invariants, and indexes.
+  connector_authoring:
+    - path: docs/spec/connector-authoring-kit/README.md
+      when: Building a new connector or evolving connector runtime interfaces/contracts.
+  ui_product:
+    - path: docs/spec/spec-ui.md
+      when: UI IA, panel contracts, and interaction rules.
+    - path: docs/tests-ui.md
+      when: Manual validation entry point (index).
+  manual_tests:
+    - path: docs/tests-cli.md
+      when: CLI workflows or operator instructions change.
+    - path: docs/tests-daemon.md
+      when: Daemon/control-plane workflows or operator instructions change.
+  supporting_docs:
+    - path: docs/harness/ARCHITECTURE.md
+      when: Dependency boundaries or layering assumptions change.
+    - path: docs/harness/SECURITY.md
+      when: Auth, approval, secret, or trust-boundary policy changes.
+    - path: docs/harness/RELIABILITY.md
+      when: Delivery, retry, or failure-handling guarantees change.
+    - path: docs/ops/macos-daemon-packaging.md
+      when: macOS packaging or local install flows change.
+    - path: docs/ops/twilio-live-cli-smoke.md
+      when: Live Twilio smoke validation flow changes.
+
+ui_test_panels:
+  - id: overview_setup
+    path: docs/tests-ui/00-overview-and-setup.md
+  - id: taskbar_shell
+    path: docs/tests-ui/01-taskbar-and-shell.md
+  - id: chat
+    path: docs/tests-ui/02-chat.md
+  - id: communications_tasks
+    path: docs/tests-ui/03-communications-and-tasks.md
+  - id: inspect
+    path: docs/tests-ui/04-inspect.md
+  - id: channels
+    path: docs/tests-ui/05-channels.md
+  - id: connectors
+    path: docs/tests-ui/06-connectors.md
+  - id: configuration
+    path: docs/tests-ui/07-configuration.md
+  - id: models
+    path: docs/tests-ui/08-models-and-model-to-chat-e2e.md
+  - id: automation_visual_cleanup
+    path: docs/tests-ui/09-automation-visual-and-cleanup.md
+
+loading_rules:
+  - rule: Start with README, CONTRIBUTING, and bootstrap docs before opening full specs.
+  - rule: For UI work, load only the panel test file(s) touched by the change.
+  - rule: Prefer diff-first loading: touched files plus directly related contract files.
+  - rule: Save verbose command output to logs and read failure-only lines first.
+  - rule: Keep public docs free of workstation-specific absolute paths.

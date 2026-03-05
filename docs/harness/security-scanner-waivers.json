@@ -1,0 +1,28 @@
+{
+  "gosec": [
+    {
+      "rule_id": "G702",
+      "file": "source/services/daemon-go/cmd/personal-agent-daemon/cloudflared_connector_worker_runtime.go",
+      "line": 350,
+      "reason": "Cloudflared worker execution is constrained to an explicit command allowlist, and PA_CLOUDFLARED_BINARY overrides are validated to absolute non-symlink regular executable files before command construction.",
+      "tracked_by": "S-015",
+      "added_on": "2026-03-04"
+    },
+    {
+      "rule_id": "G704",
+      "file": "source/services/daemon-go/internal/transport/client.go",
+      "line": 521,
+      "reason": "Client request URL is constructed from daemon transport config plus fixed route paths; current taint report is treated as false positive.",
+      "tracked_by": "S-009",
+      "added_on": "2026-03-04"
+    },
+    {
+      "rule_id": "G704",
+      "file": "source/services/daemon-go/internal/transport/client.go",
+      "line": 534,
+      "reason": "HTTP client call uses the same fixed control-plane route composition as request creation; no untrusted URL source in current call graph.",
+      "tracked_by": "S-009",
+      "added_on": "2026-03-04"
+    }
+  ]
+}

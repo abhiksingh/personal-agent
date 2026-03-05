@@ -1,0 +1,13 @@
+{
+  "workspace_id": "ws1",
+  "task_id": "task-contract-status",
+  "run_id": "run-contract-status",
+  "state": "queued",
+  "run_state": "queued",
+  "updated_at": "2026-02-26T00:00:00Z",
+  "actions": {
+    "can_cancel": false,
+    "can_retry": false,
+    "can_requeue": false
+  }
+}

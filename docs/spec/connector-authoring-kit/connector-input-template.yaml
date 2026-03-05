@@ -1,0 +1,58 @@
+version: 1
+updated_on: 2026-03-03
+
+connector:
+  connector_id: "<required-canonical-id>"
+  plugin_id: "<required-plugin-id>"
+  worker_type: "<required-worker-type>"
+  display_name: "<required-display-name>"
+  kind: "connector"
+
+  logical_channels: []
+  # allowed values when used: app, message, voice
+
+  capabilities:
+    - key: "<required-capability-key>"
+      description: "<capability-description>"
+      execute_operation: "<worker-operation-name>"
+      input_schema_notes:
+        - "<required-input-field>"
+      output_schema_notes:
+        - "<required-output-field>"
+
+runtime:
+  ingress:
+    required: false
+    source: ""
+    idempotency_key: ""
+    cursor_strategy: ""
+  permissions:
+    required: false
+    system_targets: []
+  external_dependencies: []
+
+ui_surface:
+  status_card:
+    required: true
+    config_fields: []
+  diagnostics:
+    required: true
+  test_operation:
+    required: true
+
+security:
+  worker_auth_required: true
+  secret_fields: []
+  redaction_requirements:
+    - "No secret material in status, evidence, or logs."
+
+validation:
+  required_tests:
+    - "adapter unit tests"
+    - "worker runtime tests"
+    - "dispatch/restart behavior tests"
+    - "ui status/test operation tests"
+  manual_test_docs:
+    - "docs/tests-cli.md"
+    - "docs/tests-daemon.md"
+    - "docs/tests-ui.md"

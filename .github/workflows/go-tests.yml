@@ -1,0 +1,48 @@
+name: Go Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: go-tests-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: daemon-go
+            module: source/services/daemon-go
+            go_version_file: source/services/daemon-go/go.mod
+            command: go test ./...
+          - name: cli-go
+            module: source/clients/cli-go
+            go_version_file: source/clients/cli-go/go.mod
+            command: go test ./...
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: ${{ matrix.go_version_file }}
+          cache: true
+          cache-dependency-path: |
+            source/services/daemon-go/go.sum
+            source/clients/cli-go/go.sum
+
+      - name: Run Go tests (${{ matrix.name }})
+        working-directory: ${{ matrix.module }}
+        run: ${{ matrix.command }}

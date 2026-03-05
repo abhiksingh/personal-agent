@@ -1,0 +1,31 @@
+{
+  "lifecycle_state": "running",
+  "process_id": 1234,
+  "setup_state": "ready",
+  "install_state": "installed",
+  "database_ready": true,
+  "control_auth": {
+    "state": "configured",
+    "source": "auth_token_file",
+    "remediation_hints": []
+  },
+  "health_classification": {
+    "overall_state": "ready",
+    "core_runtime_state": "ready",
+    "plugin_runtime_state": "healthy",
+    "blocking": false
+  },
+  "controls": {
+    "start": true,
+    "stop": true,
+    "restart": true
+  },
+  "control_operation": {
+    "state": "idle",
+    "action": "",
+    "started_at": "",
+    "completed_at": "",
+    "error": "",
+    "attempt_count": 0
+  }
+}

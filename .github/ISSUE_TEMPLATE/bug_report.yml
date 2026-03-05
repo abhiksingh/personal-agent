@@ -1,0 +1,58 @@
+name: Bug report
+description: Report a reproducible defect in PersonalAgent.
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for reproducible defects. For vulnerabilities or secret exposure, do not file a public issue; use the private path in `SECURITY.md`.
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Describe the problem in one or two sentences.
+      placeholder: The daemon starts, but the app never reaches a ready state.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Share the relevant platform, toolchain, and runtime setup.
+      placeholder: macOS 14.6, Xcode 16, Go 1.24, running `tools/scripts/check_harness.sh`
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Give the smallest reliable sequence.
+      placeholder: |
+        1. Run ...
+        2. Open ...
+        3. Observe ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Logs, screenshots, or other evidence
+      description: Paste the most relevant output only. Redact secrets.
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context

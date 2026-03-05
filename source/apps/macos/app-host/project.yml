@@ -1,0 +1,55 @@
+name: PersonalAgent
+options:
+  minimumXcodeGenVersion: 2.44.1
+settings:
+  base:
+    SWIFT_VERSION: 6.0
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+packages:
+  PersonalAgentUI:
+    path: Packages/PersonalAgentUI
+targets:
+  PersonalAgent:
+    type: application
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - AppHost/Sources
+      - path: AppHost/Resources
+        buildPhase: resources
+    settings:
+      base:
+        PRODUCT_NAME: PersonalAgent
+        PRODUCT_BUNDLE_IDENTIFIER: com.personalagent.app
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Personal Agent
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        CODE_SIGNING_ALLOWED: NO
+    dependencies:
+      - package: PersonalAgentUI
+        product: PersonalAgentUI
+  PersonalAgentHostUITests:
+    type: bundle.ui-testing
+    platform: macOS
+    deploymentTarget: "14.0"
+    sources:
+      - AppHostUITests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.personalagent.app.host-uitests
+        GENERATE_INFOPLIST_FILE: YES
+        CODE_SIGNING_ALLOWED: NO
+    dependencies:
+      - target: PersonalAgent
+schemes:
+  PersonalAgent:
+    build:
+      targets:
+        PersonalAgent: all
+        PersonalAgentHostUITests: [test]
+    test:
+      config: Debug
+      targets:
+        - name: PersonalAgentHostUITests
+    run:
+      config: Debug

@@ -1,0 +1,33 @@
+{
+  "lifecycle_state": "stopped",
+  "process_id": 0,
+  "setup_state": "awaiting_configuration",
+  "install_state": "installed",
+  "database_ready": true,
+  "control_auth": {
+    "state": "missing",
+    "source": "auth_token_file",
+    "remediation_hints": [
+      "set a daemon auth token via --auth-token-file or --auth-token"
+    ]
+  },
+  "health_classification": {
+    "overall_state": "degraded",
+    "core_runtime_state": "degraded",
+    "plugin_runtime_state": "unknown",
+    "blocking": true
+  },
+  "controls": {
+    "start": true,
+    "stop": false,
+    "restart": false
+  },
+  "control_operation": {
+    "state": "idle",
+    "action": "",
+    "started_at": "",
+    "completed_at": "",
+    "error": "",
+    "attempt_count": 0
+  }
+}

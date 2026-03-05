@@ -1,0 +1,16 @@
+package: openapitypes
+generate:
+  models: true
+output: task_submit_types.gen.go
+output-options:
+  include-operation-ids:
+    - submitTask
+    - approvalInboxList
+    - taskRunList
+    - providerSet
+    - providerList
+    - providerCheck
+    - modelList
+    - modelDiscover
+    - modelRouteExplain
+    - chatTurn

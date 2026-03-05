@@ -1,0 +1,28 @@
+name: Support question
+description: Ask a usage or setup question about PersonalAgent.
+title: "[Support]: "
+labels:
+  - question
+body:
+  - type: textarea
+    id: question
+    attributes:
+      label: Question
+      description: What are you trying to do, and where are you blocked?
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Share the relevant environment, component, and commands you already tried.
+      placeholder: macOS 14.6, running the daemon locally, blocked while packaging the app host
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Relevant logs or screenshots
+      description: Paste only the most relevant excerpts and redact secrets.

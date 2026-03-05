@@ -1,0 +1,131 @@
+package transport
+
+import (
+	"net/http"
+	"net/http/httptest"
+	"strings"
+	"testing"
+)
+
+func TestRegisterRoutesIncludesExpectedControlPaths(t *testing.T) {
+	server := &Server{}
+	mux := http.NewServeMux()
+	server.registerRoutes(mux)
+
+	expectedRoutes := []string{
+		"/v1/tasks",
+		"/v1/tasks/list",
+		"/v1/tasks/cancel",
+		"/v1/tasks/retry",
+		"/v1/tasks/requeue",
+		"/v1/tasks/task-123",
+		"/v1/approvals/list",
+		"/v1/comm/threads/list",
+		"/v1/comm/events/list",
+		"/v1/comm/call-sessions/list",
+		"/v1/capabilities/smoke",
+		"/v1/realtime/ws",
+		"/v1/meta/capabilities",
+		"/v1/daemon/lifecycle/status",
+		"/v1/daemon/lifecycle/control",
+		"/v1/daemon/lifecycle/plugins/history",
+		"/v1/secrets/refs",
+		"/v1/secrets/refs/ws1/OPENAI_API_KEY",
+		"/v1/providers/set",
+		"/v1/providers/list",
+		"/v1/providers/check",
+		"/v1/models/list",
+		"/v1/models/discover",
+		"/v1/models/add",
+		"/v1/models/remove",
+		"/v1/models/enable",
+		"/v1/models/disable",
+		"/v1/models/select",
+		"/v1/models/policy",
+		"/v1/models/resolve",
+		"/v1/models/route/simulate",
+		"/v1/models/route/explain",
+		"/v1/chat/turn/explain",
+		"/v1/chat/turn",
+		"/v1/agent/run",
+		"/v1/agent/approve",
+		"/v1/delegation/grant",
+		"/v1/delegation/list",
+		"/v1/delegation/revoke",
+		"/v1/delegation/check",
+		"/v1/delegation/capability-grants/upsert",
+		"/v1/delegation/capability-grants/list",
+		"/v1/identity/workspaces",
+		"/v1/identity/principals",
+		"/v1/identity/context",
+		"/v1/identity/context/select-workspace",
+		"/v1/identity/bootstrap",
+		"/v1/identity/devices/list",
+		"/v1/identity/sessions/list",
+		"/v1/identity/sessions/revoke",
+		"/v1/comm/send",
+		"/v1/comm/attempts",
+		"/v1/comm/webhook-receipts/list",
+		"/v1/comm/ingest-receipts/list",
+		"/v1/comm/policy/set",
+		"/v1/comm/policy/list",
+		"/v1/comm/messages/ingest",
+		"/v1/comm/mail/ingest",
+		"/v1/comm/calendar/ingest",
+		"/v1/comm/browser/ingest",
+		"/v1/channels/twilio/set",
+		"/v1/channels/twilio/get",
+		"/v1/channels/twilio/check",
+		"/v1/channels/twilio/sms-chat-turn",
+		"/v1/channels/twilio/start-call",
+		"/v1/channels/twilio/call-status",
+		"/v1/channels/twilio/transcript",
+		"/v1/channels/twilio/ingest-sms",
+		"/v1/channels/twilio/ingest-voice",
+		"/v1/channels/twilio/webhook/serve",
+		"/v1/channels/twilio/webhook/replay",
+		"/v1/channels/mappings/list",
+		"/v1/channels/mappings/upsert",
+		"/v1/channels/status",
+		"/v1/connectors/status",
+		"/v1/channels/diagnostics",
+		"/v1/connectors/diagnostics",
+		"/v1/channels/config/upsert",
+		"/v1/connectors/config/upsert",
+		"/v1/channels/test",
+		"/v1/connectors/test",
+		"/v1/connectors/permission/request",
+		"/v1/connectors/cloudflared/version",
+		"/v1/connectors/cloudflared/exec",
+		"/v1/automation/create",
+		"/v1/automation/list",
+		"/v1/automation/fire-history",
+		"/v1/automation/update",
+		"/v1/automation/delete",
+		"/v1/automation/run/schedule",
+		"/v1/automation/run/comm-event",
+		"/v1/automation/comm-trigger/metadata",
+		"/v1/automation/comm-trigger/validate",
+		"/v1/inspect/run",
+		"/v1/inspect/transcript",
+		"/v1/inspect/memory",
+		"/v1/inspect/logs/query",
+		"/v1/inspect/logs/stream",
+		"/v1/retention/purge",
+		"/v1/retention/compact-memory",
+		"/v1/context/samples",
+		"/v1/context/tune",
+		"/v1/context/memory/inventory",
+		"/v1/context/memory/compaction-candidates",
+		"/v1/context/retrieval/documents",
+		"/v1/context/retrieval/chunks",
+	}
+
+	for _, path := range expectedRoutes {
+		request := httptest.NewRequest(http.MethodGet, "http://localhost"+path, nil)
+		_, pattern := mux.Handler(request)
+		if strings.TrimSpace(pattern) == "" {
+			t.Fatalf("expected route to be registered for %s", path)
+		}
+	}
+}

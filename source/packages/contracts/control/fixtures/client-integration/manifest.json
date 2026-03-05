@@ -1,0 +1,49 @@
+{
+  "fixture_pack_id": "personal-agent-control-client-integration-v1",
+  "api_version": "v1",
+  "generated_on": "2026-02-26",
+  "fixtures": [
+    {
+      "id": "fx.control.daemon.lifecycle.control_auth.configured.v1",
+      "contract": "daemon.lifecycle.control_auth",
+      "path": "daemon_lifecycle_control_auth_configured.json",
+      "runner": "tools/scripts/check_daemon_auth_state_contracts.sh",
+      "notes": "Configured auth token state from /v1/daemon/lifecycle/status."
+    },
+    {
+      "id": "fx.control.daemon.lifecycle.control_auth.missing.v1",
+      "contract": "daemon.lifecycle.control_auth",
+      "path": "daemon_lifecycle_control_auth_missing.json",
+      "runner": "tools/scripts/check_daemon_auth_state_contracts.sh",
+      "notes": "Missing auth token state from /v1/daemon/lifecycle/status."
+    },
+    {
+      "id": "fx.control.tasks.status.actions.defaults.v1",
+      "contract": "tasks.status.actions",
+      "path": "task_status_actions_defaulted.json",
+      "runner": "tools/scripts/check_task_actions_contracts.sh",
+      "notes": "Task status payload with deterministic action defaults."
+    },
+    {
+      "id": "fx.control.tasks.list.actions.defaults.v1",
+      "contract": "tasks.list.actions",
+      "path": "task_run_list_actions_defaulted.json",
+      "runner": "tools/scripts/check_task_actions_contracts.sh",
+      "notes": "Task run list payload with deterministic action defaults."
+    },
+    {
+      "id": "fx.control.channels.status.descriptor_defaults.v1",
+      "contract": "channels.status.config_field_descriptors",
+      "path": "channel_status_descriptor_defaults.json",
+      "runner": "tools/scripts/check_config_field_descriptor_contracts.sh",
+      "notes": "Channel status descriptor payload with required metadata defaults."
+    },
+    {
+      "id": "fx.control.connectors.status.descriptor_defaults.v1",
+      "contract": "connectors.status.config_field_descriptors",
+      "path": "connector_status_descriptor_defaults.json",
+      "runner": "tools/scripts/check_config_field_descriptor_contracts.sh",
+      "notes": "Connector status descriptor payload with required metadata defaults."
+    }
+  ]
+}

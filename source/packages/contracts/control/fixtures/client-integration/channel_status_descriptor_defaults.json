@@ -1,0 +1,38 @@
+{
+  "workspace_id": "ws1",
+  "channels": [
+    {
+      "channel_id": "message",
+      "display_name": "Message",
+      "kind": "channel",
+      "plugin_id": "messages.daemon",
+      "status": "running",
+      "summary": "Messages channel is healthy.",
+      "configured": true,
+      "enabled": true,
+      "mapped_connector_ids": [
+        "imessage",
+        "twilio"
+      ],
+      "mapped_connector_labels": [
+        "iMessage Connector",
+        "Twilio Connector"
+      ],
+      "configuration": {
+        "status_reason": "healthy"
+      },
+      "config_field_descriptors": [
+        {
+          "key": "poll_interval_seconds",
+          "label": "Poll Interval Seconds",
+          "type": "number",
+          "required": false,
+          "enum_options": [],
+          "secret": false,
+          "write_only": false,
+          "help_text": "Polling interval for inbox refresh."
+        }
+      ]
+    }
+  ]
+}

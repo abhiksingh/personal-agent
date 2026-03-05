@@ -1,0 +1,24 @@
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.icns binary
+*.pcm binary
+*.swiftmodule binary
+*.db binary
+*.sqlite binary
+
+*.pbxproj text eol=lf
+*.xcscheme text eol=lf
+*.xcworkspacedata text eol=lf
+*.sh text eol=lf
+*.ps1 text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# Generated or low-signal machine artifacts
+source/packages/contracts/control/openapi.yaml linguist-generated=true
+source/packages/contracts/realtime/event-envelope.schema.json linguist-generated=true
+source/packages/contracts/control/fixtures/** linguist-generated=true

@@ -1,0 +1,22 @@
+# Default owner
+* github@abhisheksingh.com
+
+# Repository policy and intake
+/.github/ github@abhisheksingh.com
+/README.md github@abhisheksingh.com
+/CONTRIBUTING.md github@abhisheksingh.com
+/CODE_OF_CONDUCT.md github@abhisheksingh.com
+/SECURITY.md github@abhisheksingh.com
+/SUPPORT.md github@abhisheksingh.com
+/LICENSE github@abhisheksingh.com
+
+# Product and release documentation
+/docs/ github@abhisheksingh.com
+
+# Core implementation areas
+/source/services/daemon-go/ github@abhisheksingh.com
+/source/clients/cli-go/ github@abhisheksingh.com
+/source/apps/macos/app-host/ github@abhisheksingh.com
+/source/apps/macos/app-host-v2/ github@abhisheksingh.com
+/source/packages/ github@abhisheksingh.com
+/tools/ github@abhisheksingh.com

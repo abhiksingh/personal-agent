@@ -1,0 +1,350 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		82A8E328DD2F15847C75FED2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3734029F18456DFEC56D6D45 /* Assets.xcassets */; };
+		9BC21D1A2687239EDCBBD45E /* PersonalAgentHostApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C96451C90301A6EA6740E5F /* PersonalAgentHostApp.swift */; };
+		C9F77DDDB0BA1EBE76383E65 /* PersonalAgentUIV2 in Frameworks */ = {isa = PBXBuildFile; productRef = 67E246791DB67803C7278A5F /* PersonalAgentUIV2 */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		1E006D96849D76157A9DFF6A /* PersonalAgentV2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = PersonalAgentV2.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		3734029F18456DFEC56D6D45 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		3C96451C90301A6EA6740E5F /* PersonalAgentHostApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalAgentHostApp.swift; sourceTree = "<group>"; };
+		79A4AFEFB03F613A2FA58FDE /* PersonalAgentUIV2 */ = {isa = PBXFileReference; lastKnownFileType = folder; name = PersonalAgentUIV2; path = Packages/PersonalAgentUIV2; sourceTree = SOURCE_ROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3DE76A82FDA8BCB64326AA5A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C9F77DDDB0BA1EBE76383E65 /* PersonalAgentUIV2 in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		455FF9A5FE9CD53E18C1A3B7 /* Packages */ = {
+			isa = PBXGroup;
+			children = (
+				79A4AFEFB03F613A2FA58FDE /* PersonalAgentUIV2 */,
+			);
+			path = Packages;
+			sourceTree = "<group>";
+		};
+		4A0B657B0F6A1AEFEF8E0D56 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				1E006D96849D76157A9DFF6A /* PersonalAgentV2.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A1E527EF8B3CA3796BB036A5 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				3734029F18456DFEC56D6D45 /* Assets.xcassets */,
+			);
+			name = Resources;
+			path = AppHost/Resources;
+			sourceTree = "<group>";
+		};
+		E420CC02BAAC4F04FF6D7CC9 = {
+			isa = PBXGroup;
+			children = (
+				455FF9A5FE9CD53E18C1A3B7 /* Packages */,
+				A1E527EF8B3CA3796BB036A5 /* Resources */,
+				EB55D9FB11A5A6DFCE78C97A /* Sources */,
+				4A0B657B0F6A1AEFEF8E0D56 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		EB55D9FB11A5A6DFCE78C97A /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				3C96451C90301A6EA6740E5F /* PersonalAgentHostApp.swift */,
+			);
+			name = Sources;
+			path = AppHost/Sources;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		5C26EA805FE56BCFB65ABBC8 /* PersonalAgentV2 */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7DE01A3AC9781ECFCCD07115 /* Build configuration list for PBXNativeTarget "PersonalAgentV2" */;
+			buildPhases = (
+				B4AC1C19B29A6569580EB834 /* Sources */,
+				311766B2B37443F580B3E152 /* Resources */,
+				3DE76A82FDA8BCB64326AA5A /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PersonalAgentV2;
+			packageProductDependencies = (
+				67E246791DB67803C7278A5F /* PersonalAgentUIV2 */,
+			);
+			productName = PersonalAgentV2;
+			productReference = 1E006D96849D76157A9DFF6A /* PersonalAgentV2.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		7E03C3ADD2B2F55A9F387398 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+			};
+			buildConfigurationList = 6BCD8DB5EBBD3810E0033DB8 /* Build configuration list for PBXProject "PersonalAgent" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = E420CC02BAAC4F04FF6D7CC9;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FF6ABD72776BCAB473821A05 /* XCLocalSwiftPackageReference "Packages/PersonalAgentUIV2" */,
+			);
+			preferredProjectObjectVersion = 77;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				5C26EA805FE56BCFB65ABBC8 /* PersonalAgentV2 */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		311766B2B37443F580B3E152 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				82A8E328DD2F15847C75FED2 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		B4AC1C19B29A6569580EB834 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9BC21D1A2687239EDCBBD45E /* PersonalAgentHostApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		361C5D136487EFAD23E1A911 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Release;
+		};
+		5F1D297801F35319236749AE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+					INFOPLIST_KEY_CFBundleDisplayName = "Personal Agent";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.personalagent.app.v2;
+					PRODUCT_NAME = PersonalAgent;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		64A87A2D38A4F065ADB78138 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_ALLOWED = NO;
+				COMBINE_HIDPI_IMAGES = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+					INFOPLIST_KEY_CFBundleDisplayName = "Personal Agent";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.personalagent.app.v2;
+					PRODUCT_NAME = PersonalAgent;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		6F118379356C90E840F7A0AF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 6.0;
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6BCD8DB5EBBD3810E0033DB8 /* Build configuration list for PBXProject "PersonalAgent" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6F118379356C90E840F7A0AF /* Debug */,
+				361C5D136487EFAD23E1A911 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		7DE01A3AC9781ECFCCD07115 /* Build configuration list for PBXNativeTarget "PersonalAgentV2" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				64A87A2D38A4F065ADB78138 /* Debug */,
+				5F1D297801F35319236749AE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		FF6ABD72776BCAB473821A05 /* XCLocalSwiftPackageReference "Packages/PersonalAgentUIV2" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PersonalAgentUIV2;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		67E246791DB67803C7278A5F /* PersonalAgentUIV2 */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PersonalAgentUIV2;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 7E03C3ADD2B2F55A9F387398 /* Project object */;
+}

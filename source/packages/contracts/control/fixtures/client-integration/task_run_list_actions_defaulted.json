@@ -1,0 +1,25 @@
+{
+  "workspace_id": "ws1",
+  "items": [
+    {
+      "task_id": "task-contract-list",
+      "run_id": "run-contract-list",
+      "workspace_id": "ws1",
+      "title": "Contract list item",
+      "task_state": "queued",
+      "run_state": "queued",
+      "priority": 1,
+      "requested_by_actor_id": "actor.requester",
+      "subject_principal_actor_id": "actor.subject",
+      "task_created_at": "2026-02-26T00:00:00Z",
+      "task_updated_at": "2026-02-26T00:00:00Z",
+      "actions": {
+        "can_cancel": false,
+        "can_retry": false,
+        "can_requeue": false
+      }
+    }
+  ],
+  "has_more": false,
+  "next_cursor": ""
+}

@@ -1,0 +1,41 @@
+{
+  "workspace_id": "ws1",
+  "connectors": [
+    {
+      "connector_id": "twilio",
+      "display_name": "Twilio Connector",
+      "kind": "connector",
+      "plugin_id": "twilio.daemon",
+      "status": "running",
+      "summary": "Twilio connector is ready.",
+      "configured": true,
+      "enabled": true,
+      "logical_connector_id": "twilio",
+      "logical_connector_label": "Twilio",
+      "mapped_channel_ids": [
+        "message",
+        "voice"
+      ],
+      "mapped_channel_labels": [
+        "Message",
+        "Voice"
+      ],
+      "configuration": {
+        "credentials_configured": true,
+        "status_reason": "healthy"
+      },
+      "config_field_descriptors": [
+        {
+          "key": "auth_token_secret_ref",
+          "label": "Auth Token Secret Ref",
+          "type": "string",
+          "required": true,
+          "enum_options": [],
+          "secret": true,
+          "write_only": true,
+          "help_text": "SecretRef ID for Twilio auth token."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,44 @@
+{
+  "workers": [
+    {
+      "plugin_id": "messages.daemon",
+      "kind": "connector",
+      "worker_type": "messages"
+    },
+    {
+      "plugin_id": "mail.daemon",
+      "kind": "connector",
+      "worker_type": "mail"
+    },
+    {
+      "plugin_id": "calendar.daemon",
+      "kind": "connector",
+      "worker_type": "calendar"
+    },
+    {
+      "plugin_id": "browser.daemon",
+      "kind": "connector",
+      "worker_type": "browser"
+    },
+    {
+      "plugin_id": "finder.daemon",
+      "kind": "connector",
+      "worker_type": "finder"
+    },
+    {
+      "plugin_id": "cloudflared.daemon",
+      "kind": "connector",
+      "worker_type": "cloudflared"
+    },
+    {
+      "plugin_id": "twilio.daemon",
+      "kind": "connector",
+      "worker_type": "twilio"
+    },
+    {
+      "plugin_id": "app_chat.daemon",
+      "kind": "channel",
+      "worker_type": "app_chat"
+    }
+  ]
+}
